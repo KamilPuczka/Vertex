@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Api.Authorization;
+using Vertex.Helpers;
+using Vertex.Services;
 
 namespace Vertex
 {
@@ -29,6 +31,8 @@ namespace Vertex
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(new ConfigGetterHelper(Configuration));
+            services.AddScoped<IGetOperations, GetOperations>();
             // Add framework services.
             services.AddAuthentication();
             services.AddMvc();

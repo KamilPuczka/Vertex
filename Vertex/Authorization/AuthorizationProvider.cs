@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using FirebirdSql.Data.FirebirdClient;
 
+
 namespace Api.Authorization
 {
     public sealed class AuthorizationProvider : OpenIdConnectServerProvider
@@ -64,8 +65,12 @@ namespace Api.Authorization
 
                     // Add the mandatory subject/user identifier claim.
                     identity.AddClaim(OpenIdConnectConstants.Claims.Subject, conString);
-                    
-                    var ticket = new AuthenticationTicket(
+
+                identity.AddClaim("username", conString,
+              OpenIdConnectConstants.Destinations.AccessToken,
+              OpenIdConnectConstants.Destinations.IdentityToken);
+
+                var ticket = new AuthenticationTicket(
                         new ClaimsPrincipal(identity),
                         new AuthenticationProperties(),
                         context.Options.AuthenticationScheme);

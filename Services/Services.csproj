@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Core" Version="1.4.0" />
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="5.11.0" />
   </ItemGroup>
 
 </Project>
