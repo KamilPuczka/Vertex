@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Api.Authorization;
 using Vertex.Helpers;
 using Vertex.Services;
+using Services;
 
 namespace Vertex
 {
@@ -33,6 +34,7 @@ namespace Vertex
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton(new ConfigGetterHelper(Configuration));
             services.AddScoped<IGetOperations, GetOperations>();
+            services.AddScoped<IEncrypter, Encrypter>();
             // Add framework services.
             services.AddAuthentication();
             services.AddMvc();

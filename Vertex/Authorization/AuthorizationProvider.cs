@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using FirebirdSql.Data.FirebirdClient;
-
+using Services;
 
 namespace Api.Authorization
 {
@@ -36,13 +36,14 @@ namespace Api.Authorization
 
         public override async Task HandleTokenRequest(HandleTokenRequestContext context)
         {
+            var encrypter = context.HttpContext.RequestServices.GetRequiredService<IEncrypter>();
             if (context.Request.IsPasswordGrantType())
             {
                 var Config = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
                 var conString = Config.GetSection("ConnectionString").GetValue<string>("dbCon");
                 conString = conString.Replace("@@username@@", context.Request.Username);
                 conString = conString.Replace("@@pass@@", context.Request.Password);
-              
+                
                 using(FbConnection mycon = new FbConnection(conString))
                 {
                     try
@@ -56,9 +57,9 @@ namespace Api.Authorization
                     }
                    
                 }
-                   
+                conString = encrypter.EncryptConnectionString(conString);
 
-                    var identity = new ClaimsIdentity(
+                var identity = new ClaimsIdentity(
                         context.Options.AuthenticationScheme,
                         OpenIdConnectConstants.Claims.Name,
                         OpenIdConnectConstants.Claims.Role);

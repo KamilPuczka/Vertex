@@ -6,7 +6,7 @@ namespace Services
 {
    public interface IEncrypter
     {
-        string HashConnectionString(string conString);
-        string EncryptConnectionString(string hash);
+        string EncryptConnectionString(string text);
+        string DecryptString(string cipherText);
     }
 }
