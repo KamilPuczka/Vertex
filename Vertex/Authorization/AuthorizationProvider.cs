@@ -39,13 +39,9 @@ namespace Api.Authorization
             {
                 var Config = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
                 var conString = Config.GetSection("ConnectionString").GetValue<string>("dbCon");
-
-                //if (user == null)
-                //    {
-                //        InvalidGrant(context);
-                //        return;
-                //    }
-
+                conString = conString.Replace("@@username@@", context.Request.Username);
+                conString = conString.Replace("@@pass@@", context.Request.Password);
+              
                 using(FbConnection mycon = new FbConnection(conString))
                 {
                     try
@@ -85,33 +81,7 @@ namespace Api.Authorization
             }
         
 
-        // public override async Task ValidateLogoutRequest(ValidateLogoutRequestContext context)
-        // {
-        //     // var database = context.HttpContext.RequestServices.GetRequiredService<ApplicationContext>();
-
-        //     // // When provided, post_logout_redirect_uri must exactly
-        //     // // match the address registered by the client application.
-        //     // if (!string.IsNullOrEmpty(context.PostLogoutRedirectUri) &&
-        //     //     !await database.Applications.AnyAsync(application => application.LogoutRedirectUri == context.PostLogoutRedirectUri))
-        //     // {
-        //     //     context.Reject(
-        //     //         error: OpenIdConnectConstants.Errors.InvalidRequest,
-        //     //         description: "The specified 'post_logout_redirect_uri' is invalid.");
-
-        //     //     return;
-        //     // }
-
-        //     if (string.IsNullOrEmpty(context.PostLogoutRedirectUri))
-        //     {
-        //         context.Reject(
-        //             error: OpenIdConnectConstants.Errors.InvalidRequest,
-        //             description: "The specified 'post_logout_redirect_uri' is invalid.");
-
-        //         return;
-        //     }
-
-        //     context.Validate();
-        // }
+      
 
         private void InvalidGrant(BaseValidatingTicketContext context)
         {
